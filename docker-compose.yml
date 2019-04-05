@@ -1,0 +1,49 @@
+version: '3.7'
+
+services:
+  comm:
+    image: onlyoffice/communityserver:latest
+    restart: always
+    ports:
+      - "3443:443"
+    depends_on:
+      - db
+    volumes:
+      - ./keys/fullchain.pem:/var/www/onlyoffice/Data/fullchain.pem:ro
+      - ./keys/privkey.pem:/var/www/onlyoffice/Data/privkey.pem:ro
+      - ./community/logs:/var/log/onlyoffice
+      - ./community/data:/var/www/onlyoffice/Data
+    environment:
+      - SSL_CERTIFICATE_PATH=/var/www/onlyoffice/Data/fullchain.pem
+      - SSL_KEY_PATH=/var/www/onlyoffice/Data/privkey.pem
+      - MYSQL_SERVER_HOST=db
+      - MYSQL_SERVER_PORT=3306
+      - MYSQL_SERVER_DB_NAME=community
+      - MYSQL_SERVER_USER=community
+      - MYSQL_SERVER_PASS=community
+  docs:
+    image: onlyoffice/documentserver:latest
+    restart: always
+    ports:
+      - "4443:443"
+    volumes:
+      - ./keys/fullchain.pem:/var/www/onlyoffice/Data/fullchain.pem:ro
+      - ./keys/privkey.pem:/var/www/onlyoffice/Data/privkey.pem:ro
+      - ./document/logs:/var/log/onlyoffice
+    environment:
+      - SSL_CERTIFICATE_PATH=/var/www/onlyoffice/Data/fullchain.pem
+      - SSL_KEY_PATH=/var/www/onlyoffice/Data/privkey.pem
+  db:
+    image: mariadb:5.5
+    restart: always
+    command: mysqld --character-set-server=utf8 --collation-server=utf8_general_ci
+    environment:
+      - MYSQL_DATABASE=community
+      - MYSQL_ROOT_PASSWORD=secret
+      - MYSQL_USER=community
+      - MYSQL_PASSWORD=community
+    expose:
+      - '3306'
+    volumes:
+      - ${PWD}/db:/var/lib/mysql
+
