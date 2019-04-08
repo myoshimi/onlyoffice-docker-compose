@@ -9,10 +9,10 @@ services:
     depends_on:
       - db
     volumes:
-      - ./keys/fullchain.pem:/var/www/onlyoffice/Data/fullchain.pem:ro
-      - ./keys/privkey.pem:/var/www/onlyoffice/Data/privkey.pem:ro
-      - ./community/logs:/var/log/onlyoffice
-      - ./community/data:/var/www/onlyoffice/Data
+      - ${PWD}/keys/fullchain.pem:/var/www/onlyoffice/Data/fullchain.pem:ro
+      - ${PWD}/keys/privkey.pem:/var/www/onlyoffice/Data/privkey.pem:ro
+      - ${PWD}/community/logs:/var/log/onlyoffice
+      - ${PWD}/community/data:/var/www/onlyoffice/Data
     environment:
       - SSL_CERTIFICATE_PATH=/var/www/onlyoffice/Data/fullchain.pem
       - SSL_KEY_PATH=/var/www/onlyoffice/Data/privkey.pem
@@ -27,9 +27,9 @@ services:
     ports:
       - "4443:443"
     volumes:
-      - ./keys/fullchain.pem:/var/www/onlyoffice/Data/fullchain.pem:ro
-      - ./keys/privkey.pem:/var/www/onlyoffice/Data/privkey.pem:ro
-      - ./document/logs:/var/log/onlyoffice
+      - ${PWD}/keys/fullchain.pem:/var/www/onlyoffice/Data/fullchain.pem:ro
+      - ${PWD}/keys/privkey.pem:/var/www/onlyoffice/Data/privkey.pem:ro
+      - ${PWD}/document/logs:/var/log/onlyoffice
     environment:
       - SSL_CERTIFICATE_PATH=/var/www/onlyoffice/Data/fullchain.pem
       - SSL_KEY_PATH=/var/www/onlyoffice/Data/privkey.pem
